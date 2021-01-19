@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="signature_by_company" model="ir.ui.view">
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='signature']" position="replace">
+                    <field name='signature' on_change='on_change_state' readonly='1'
+                           domain="[('company_id', '=', company_id),('user_id', '=', uid)]"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
