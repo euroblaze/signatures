@@ -1,7 +1,7 @@
 # Odoo Signatures
 ![](./static/description/icon.png)
 
-### By Simplify-ERP®
+Author: Simplify-ERP® -- https://simplify-erp.com
 
 ### What does this Module do?
 
