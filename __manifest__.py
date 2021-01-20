@@ -2,7 +2,7 @@
 {
     'name': "Signatures",
     'summary': """
-        Module for multi-company setups which allows for all mails to be branded from the currently active company's domain.""",
+        Module for multi-company setups which allows for all mails to be branded from the currently active company's domain.!""",
     'description': """
 Signatures
 ==========
