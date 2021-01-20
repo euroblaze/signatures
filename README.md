@@ -7,7 +7,7 @@ Author: Simplify-ERP® -- https://simplify-erp.com
 
 Users can setup multiple signatures, that they can select to be appended when editing their Chatter/Messages.
 
-### Features:
+### How to use this module?
 
 - Go to Signatures which is in the main menu and then choose Add Signature by Company.
 - There the user can see all the signatures added so far, as well as add new signatures for themselves for each company available by clicking Create button.
