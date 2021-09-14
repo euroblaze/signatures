@@ -5,19 +5,20 @@ from odoo.exceptions import UserError, ValidationError
 from email.utils import formataddr
 import base64
 
+
 class Signatures(models.Model):
     _name = 'nebiz.signatures'
 
     user_id = fields.Many2one('res.users', 'User', store=True)
     company_id = fields.Many2one('res.company', 'Company', store=True)
     signature = fields.Html(string='Signature', store=True)
-    user_name=fields.Char(string='Name',store=True)
-    user_mail=fields.Char(string='Email',store=True)
+    user_name = fields.Char(string='Name', store=True)
+    user_mail = fields.Char(string='Email', store=True)
     name = fields.Char(compute='get_name')
     x_signatures = fields.Char('Firstname')
-    active_signature=fields.Boolean(string='Active Signature',store=True,default=False)
+    active_signature = fields.Boolean(string='Active Signature', store=True, default=False)
 
-    @api.one
+    # @api.one
     def get_name(self):
         self.name = self.user_name
 
@@ -29,25 +30,24 @@ class Signatures(models.Model):
 
     # search edit possible only for your own records odoo and write documentation with images
 
-    @api.multi
     def unlink(self):
         for id in self:
             if id.user_id.id != self._uid:
                 raise UserError('You can delete only your own signatures!')
-        return super(Signatures,self).unlink()
+        return super(Signatures, self).unlink()
 
-    @api.multi
+    # @api.multi
     def set_signature_active(self):
-        signatures=self.search([('company_id','=',self.company_id.id),('user_id','=',self.user_id.id)])
+        signatures = self.search([('company_id', '=', self.company_id.id), ('user_id', '=', self.user_id.id)])
         for signature in signatures:
-            signature.active_signature=False
-        self.active_signature=True
+            signature.active_signature = False
+        self.active_signature = True
 
-    @api.multi
+    # @api.multi
     def disable_signature(self):
-        signatures=self.search([('company_id','=',self.company_id.id),('user_id','=',self.user_id.id)])
+        signatures = self.search([('company_id', '=', self.company_id.id), ('user_id', '=', self.user_id.id)])
         for signature in signatures:
-            signature.active_signature=False
+            signature.active_signature = False
 
 
 class Preferences(models.Model):
@@ -55,44 +55,49 @@ class Preferences(models.Model):
 
     signature = fields.Html(compute='get_signature')
 
-    @api.one
+    # @api.one
     def get_signature(self):
         rec = self.env['nebiz.signatures'].search(
-            [('company_id', '=', self.company_id.id), ('user_id', '=', self._uid),('active_signature','=',True)])
+            [('company_id', '=', self.company_id.id), ('user_id', '=', self._uid), ('active_signature', '=', True)])
         self.signature = rec.signature
 
     @api.onchange('company_id')
     def on_change_state(self):
         rec = self.env['nebiz.signatures'].search(
-            [('company_id', '=', self.company_id.id), ('user_id', '=', self._uid),('active_signature','=',True)])
+            [('company_id', '=', self.company_id.id), ('user_id', '=', self._uid), ('active_signature', '=', True)])
         if rec:
             self.signature = rec.signature
         else:
             self.signature = ''
 
     def get_name(self):
-        signature = self.env['nebiz.signatures'].search([('user_id','=',self.id),('company_id','=',self.company_id.id),('active_signature','=',True)])
+        signature = self.env['nebiz.signatures'].search(
+            [('user_id', '=', self.id), ('company_id', '=', self.company_id.id), ('active_signature', '=', True)])
         if signature.user_name == False:
-            name=self.display_name
+            name = self.display_name
         else:
-            name=signature.user_name
+            name = signature.user_name
         return name
 
     def get_email(self):
-        signature = self.env['nebiz.signatures'].search([('user_id','=',self.id),('company_id','=',self.company_id.id),('active_signature','=',True)])
+        signature = self.env['nebiz.signatures'].search(
+            [('user_id', '=', self.id), ('company_id', '=', self.company_id.id), ('active_signature', '=', True)])
         if signature.user_name == False:
-            email=self.email
+            email = self.email
         else:
-            email=signature.user_mail
+            email = signature.user_mail
         return email
+
 
 class ChangeSenderSignature(models.Model):
     _inherit = 'mail.message'
+
     @api.model
     def _get_default_from(self):
         if self.env.user.get_email():
             return formataddr((self.env.user.get_name(), self.env.user.get_email()))
-        raise UserError(_("Unable to send email, please configure the sender's email address."))
+        raise UserError("Unable to send email, please configure the sender's email address.")
+
 
 class MailTemplateSignature(models.Model):
     _inherit = 'mail.template'
@@ -110,81 +115,98 @@ class MailTemplateSignature(models.Model):
         """
         self.ensure_one()
         multi_mode = True
-        if isinstance(res_ids, (int, long)):
+        if isinstance(res_ids, (int, int)):
             res_ids = [res_ids]
             multi_mode = False
         if fields is None:
-            fields = ['subject', 'body_html', 'email_from', 'email_to', 'partner_to', 'email_cc', 'reply_to', 'scheduled_date']
+            fields = ['subject', 'body_html', 'email_from', 'email_to', 'partner_to', 'email_cc', 'reply_to',
+                      'scheduled_date']
 
-        res_ids_to_templates = self.get_email_template(res_ids)
+        # res_ids_to_templates = self.get_email_template(res_ids)
+
+        res_ids_to_templates = self.env['mail.template'].sudo().search([])
 
         # templates: res_id -> template; template -> res_ids
         templates_to_res_ids = {}
-        for res_id, template in res_ids_to_templates.iteritems():
-            templates_to_res_ids.setdefault(template, []).append(res_id)
+        # for res_id, template in res_ids_to_templates:
+        #     templates_to_res_ids.setdefault(template, []).append(res_id)
+        for template in res_ids_to_templates:
+            res_id = template
+            templates_to_res_ids[-1] = res_id
 
         results = dict()
-        for template, template_res_ids in templates_to_res_ids.iteritems():
-            Template = self.env['mail.template']
-            # generate fields value for all res_ids linked to the current template
-            if template.lang:
-                Template = Template.with_context(lang=template._context.get('lang'))
-            for field in fields:
-                Template = Template.with_context(safe=field in {'subject'})
-                generated_field_values = Template.render_template(
-                    getattr(template, field), template.model, template_res_ids,
-                    post_process=(field == 'body_html'))
-                for res_id, field_value in generated_field_values.iteritems():
-                    results.setdefault(res_id, dict())[field] = field_value
-            # compute recipients
-            if any(field in fields for field in ['email_to', 'partner_to', 'email_cc']):
-                results = template.generate_recipients(results, template_res_ids)
-            # update values for all res_ids
-            for res_id in template_res_ids:
-                values = results[res_id]
-                # body: add user signature, sanitize
-                if 'body_html' in fields and template.user_signature:
-                    signature = self.env.user.signature
-                    if signature:
-                        values['body_html'] = tools.append_content_to_html(values['body_html'], signature, plaintext=False)
-                if values.get('body_html'):
-                    values['body'] = tools.html_sanitize(values['body_html'])
-                # technical settings
-                values.update(
-                    mail_server_id=template.mail_server_id.id or False,
-                    auto_delete=template.auto_delete,
-                    model=template.model,
-                    res_id=res_id or False,
-                    attachment_ids=[attach.id for attach in template.attachment_ids],
-                )
-
-            # Add report in attachments: generate once for all template_res_ids
-            if template.report_template:
+        for template_res_ids in res_ids_to_templates:
+            for template in res_ids_to_templates:
+                # for template, template_res_ids in templates_to_res_ids.iteritems():
+                Template = self.env['mail.template']
+                # generate fields value for all res_ids linked to the current template
+                print(template)
+                if template['lang']:
+                    Template = Template.with_context(lang=template['lang'])
+                for field in fields:
+                    Template = Template.with_context(safe=field in {'subject'})
+                    # Template.render_template -> Template.generate_email
+                    # Removed post_process=(field == 'body_html'), getattr(template, field), template.model
+                    # Changed template_res_ids to template
+                    print(template.id)
+                    generated_field_values = Template.generate_email(template.id, fields=field)
+                    for res_id, field_value in generated_field_values.iteritems():
+                        results.setdefault(res_id, dict())[field] = field_value
+                # compute recipients
+                if any(field in fields for field in ['email_to', 'partner_to', 'email_cc']):
+                    results = template.generate_recipients(results, template_res_ids)
+                # update values for all res_ids
                 for res_id in template_res_ids:
-                    attachments = []
-                    report_name = self.render_template(template.report_name, template.model, res_id)
-                    report = template.report_template
-                    report_service = report.report_name
+                    values = results[res_id]
+                    # body: add user signature, sanitize
+                    if 'body_html' in fields and template.user_signature:
+                        signature = self.env.user.signature
+                        if signature:
+                            values['body_html'] = tools.append_content_to_html(values['body_html'], signature,
+                                                                               plaintext=False)
+                    if values.get('body_html'):
+                        values['body'] = tools.html_sanitize(values['body_html'])
+                    # technical settings
+                    values.update(
+                        mail_server_id=template.mail_server_id.id or False,
+                        auto_delete=template.auto_delete,
+                        model=template.model,
+                        res_id=res_id or False,
+                        attachment_ids=[attach.id for attach in template.attachment_ids],
+                    )
 
-                    if report.report_type in ['qweb-html', 'qweb-pdf']:
-                        result, format = Template.env['report'].get_pdf([res_id], report_service), 'pdf'
-                    else:
-                        result, format = odoo_report.render_report(self._cr, self._uid, [res_id], report_service, {'model': template.model}, Template._context)
+                # Add report in attachments: generate once for all template_res_ids
+                if template.report_template:
+                    for res_id in template_res_ids:
+                        attachments = []
+                        # Changed self.rencer_template -> self.generate.email
+                        # Removed template.report_name, template.model
+                        report_name = self.generate_email(res_id[0], fields=field)
+                        report = template.report_template
+                        report_service = report.report_name
 
-                    # TODO in trunk, change return format to binary to match message_post expected format
-                    result = base64.b64encode(result)
-                    if not report_name:
-                        report_name = 'report.' + report_service
-                    ext = "." + format
-                    if not report_name.endswith(ext):
-                        report_name += ext
-                    attachments.append((report_name, result))
-                    results[res_id]['attachments'] = attachments
-                    if not results[res_id]['email_from']:
-                        if self.env.user.get_email():
-                            results[res_id]['email_from'] = formataddr((self.env.user.get_name(), self.env.user.get_email()))
+                        if report.report_type in ['qweb-html', 'qweb-pdf']:
+                            result, format = Template.env['report'].get_pdf([res_id], report_service), 'pdf'
+                        else:
+                            result, format = report.render_report(self._cr, self._uid, [res_id], report_service,
+                                                                  {'model': template.model}, Template._context)
 
-        return multi_mode and results or results[res_ids[0]]
+                        # TODO in trunk, change return format to binary to match message_post expected format
+                        result = base64.b64encode(result)
+                        if not report_name:
+                            report_name = 'report.' + report_service
+                        ext = "." + format
+                        if not report_name.endswith(ext):
+                            report_name += ext
+                        attachments.append((report_name, result))
+                        results[res_id]['attachments'] = attachments
+                        if not results[res_id]['email_from']:
+                            if self.env.user.get_email():
+                                results[res_id]['email_from'] = formataddr(
+                                    (self.env.user.get_name(), self.env.user.get_email()))
+
+            return multi_mode and results or results[res_ids[0]]
+
 
 class MailWizzardSignature(models.TransientModel):
     _inherit = 'mail.compose.message'
@@ -192,9 +214,9 @@ class MailWizzardSignature(models.TransientModel):
     def _get_default_from(self):
         if self.env.user.get_email():
             return formataddr((self.env.user.get_name(), self.env.user.get_email()))
-        raise UserError(_("Unable to send email, please configure the sender's email address."))
+        raise UserError("Unable to send email, please configure the sender's email address.")
 
-    @api.multi
+    # @api.multi
     def get_mail_values(self, res_ids):
         """Generate the values that will be used by send_mail to create mail_messages
         or mail_mails. """
