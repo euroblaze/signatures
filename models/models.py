@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, tools
+from odoo import models, fields, api, tools, _
 from odoo.exceptions import UserError, ValidationError
 from email.utils import formataddr
 import base64
@@ -113,44 +113,33 @@ class MailTemplateSignature(models.Model):
                   mail.mail entry, with one extra key ``attachments``, in the
                   format [(report_name, data)] where data is base64 encoded.
         """
-        self.ensure_one()
-        multi_mode = True
-        if isinstance(res_ids, (int, int)):
-            res_ids = [res_ids]
-            multi_mode = False
-        if fields is None:
-            fields = ['subject', 'body_html', 'email_from', 'email_to', 'partner_to', 'email_cc', 'reply_to',
-                      'scheduled_date']
+        if self:
+            self.ensure_one()
+            print(self)
+            multi_mode = True
+            if isinstance(res_ids, int):
+                res_ids = [res_ids]
+                multi_mode = False
+            if fields is None:
+                fields = ['subject', 'body_html', 'email_from', 'email_to', 'partner_to', 'email_cc', 'reply_to',
+                          'scheduled_date']
+            res_ids_to_templates = self.env['mail.template'].sudo().search([])
 
-        # res_ids_to_templates = self.get_email_template(res_ids)
-
-        res_ids_to_templates = self.env['mail.template'].sudo().search([])
-
-        # templates: res_id -> template; template -> res_ids
-        templates_to_res_ids = {}
-        # for res_id, template in res_ids_to_templates:
-        #     templates_to_res_ids.setdefault(template, []).append(res_id)
-        for template in res_ids_to_templates:
-            res_id = template
-            templates_to_res_ids[-1] = res_id
-
-        results = dict()
-        for template_res_ids in res_ids_to_templates:
+            # templates: res_id -> template; template -> res_ids
+            templates_to_res_ids = {}
             for template in res_ids_to_templates:
-                # for template, template_res_ids in templates_to_res_ids.iteritems():
-                Template = self.env['mail.template']
-                # generate fields value for all res_ids linked to the current template
-                print(template)
-                if template['lang']:
-                    Template = Template.with_context(lang=template['lang'])
+                res_id = template
+                templates_to_res_ids[-1] = res_id
+
+            results = dict()
+            for lang, (template, template_res_ids) in self._classify_per_lang(res_ids).items():
                 for field in fields:
-                    Template = Template.with_context(safe=field in {'subject'})
-                    # Template.render_template -> Template.generate_email
-                    # Removed post_process=(field == 'body_html'), getattr(template, field), template.model
-                    # Changed template_res_ids to template
-                    print(template.id)
-                    generated_field_values = Template.generate_email(template.id, fields=field)
-                    for res_id, field_value in generated_field_values.iteritems():
+                    template = template.with_context(safe=(field == 'subject'))
+                    generated_field_values = template._render_field(
+                        field, template_res_ids,
+                        post_process=(field == 'body_html')
+                    )
+                    for res_id, field_value in generated_field_values.items():
                         results.setdefault(res_id, dict())[field] = field_value
                 # compute recipients
                 if any(field in fields for field in ['email_to', 'partner_to', 'email_cc']):
@@ -158,12 +147,6 @@ class MailTemplateSignature(models.Model):
                 # update values for all res_ids
                 for res_id in template_res_ids:
                     values = results[res_id]
-                    # body: add user signature, sanitize
-                    if 'body_html' in fields and template.user_signature:
-                        signature = self.env.user.signature
-                        if signature:
-                            values['body_html'] = tools.append_content_to_html(values['body_html'], signature,
-                                                                               plaintext=False)
                     if values.get('body_html'):
                         values['body'] = tools.html_sanitize(values['body_html'])
                     # technical settings
@@ -179,17 +162,17 @@ class MailTemplateSignature(models.Model):
                 if template.report_template:
                     for res_id in template_res_ids:
                         attachments = []
-                        # Changed self.rencer_template -> self.generate.email
-                        # Removed template.report_name, template.model
-                        report_name = self.generate_email(res_id[0], fields=field)
+                        report_name = self._render_field('report_name', [res_id])[res_id]
                         report = template.report_template
                         report_service = report.report_name
 
                         if report.report_type in ['qweb-html', 'qweb-pdf']:
-                            result, format = Template.env['report'].get_pdf([res_id], report_service), 'pdf'
+                            result, format = report._render_qweb_pdf([res_id])
                         else:
-                            result, format = report.render_report(self._cr, self._uid, [res_id], report_service,
-                                                                  {'model': template.model}, Template._context)
+                            res = report._render([res_id])
+                            if not res:
+                                raise UserError(_('Unsupported report type %s found.', report.report_type))
+                            result, format = res
 
                         # TODO in trunk, change return format to binary to match message_post expected format
                         result = base64.b64encode(result)
@@ -200,10 +183,6 @@ class MailTemplateSignature(models.Model):
                             report_name += ext
                         attachments.append((report_name, result))
                         results[res_id]['attachments'] = attachments
-                        if not results[res_id]['email_from']:
-                            if self.env.user.get_email():
-                                results[res_id]['email_from'] = formataddr(
-                                    (self.env.user.get_name(), self.env.user.get_email()))
 
             return multi_mode and results or results[res_ids[0]]
 

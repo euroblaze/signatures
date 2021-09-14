@@ -27,7 +27,7 @@ Features:
     'version': '0.1',
     'data': [
         'views/config.xml',
-        'views/pref2.xml',
+        'views/pref.xml',
         'security/ir.model.access.csv'
     ],
     'depends': ['base', 'mail'],

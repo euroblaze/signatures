@@ -6,8 +6,7 @@
         <field name="inherit_id" ref="base.view_users_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='signature']" position="replace">
-                <field name='signature'  readonly='1'
-                       domain="[('company_id', '=', company_id),('user_id', '=', uid)]"/>
+                <field name='signature'  readonly='1'/>
             </xpath>
         </field>
     </record>
