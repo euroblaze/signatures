@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from odoo import models, fields, api, tools, _
 from odoo.exceptions import UserError, ValidationError
 from email.utils import formataddr
@@ -8,6 +7,7 @@ import base64
 
 class Signatures(models.Model):
     _name = 'nebiz.signatures'
+    _description = 'Nebiz Signatures'
 
     user_id = fields.Many2one('res.users', 'User', store=True)
     company_id = fields.Many2one('res.company', 'Company', store=True)
@@ -18,7 +18,6 @@ class Signatures(models.Model):
     x_signatures = fields.Char('Firstname')
     active_signature = fields.Boolean(string='Active Signature', store=True, default=False)
 
-    # @api.one
     def get_name(self):
         self.name = self.user_name
 
@@ -49,6 +48,32 @@ class Signatures(models.Model):
         for signature in signatures:
             signature.active_signature = False
 
+    def get_my_signatures(self):
+        sign_out = self.env['nebiz.signatures'].search(
+            [('user_id', '=', self.env.user.id), ('active_signature', '=', True)])
+        if sign_out:
+            sign_out.write({'active_signature': False})
+        signatures = self.env['nebiz.signatures'].search([('user_id', '=', self.env.user.id)])
+        result = []
+        for signature in signatures:
+            sign = {
+                'id': signature.id,
+                'name': signature.user_name
+            }
+            result.append(sign)
+        return result
+
+    @api.model
+    def set_active_signature(self, args):
+        sign_out = self.env['nebiz.signatures'].search(
+            [('user_id', '=', self.env.user.id), ('active_signature', '=', True)])
+        if sign_out:
+            sign_out.write({'active_signature': False})
+        if args['sign_id']:
+            sign_in = self.env['nebiz.signatures'].search([('id', '=', args['sign_id'])])
+            sign_in.write({'active_signature': True})
+        return 1
+
 
 class Preferences(models.Model):
     _inherit = 'res.users'
@@ -57,8 +82,9 @@ class Preferences(models.Model):
 
     # @api.one
     def get_signature(self):
+        nebiz_company = self.env['res.company']._company_default_get('base')
         rec = self.env['nebiz.signatures'].search(
-            [('company_id', '=', self.company_id.id), ('user_id', '=', self._uid), ('active_signature', '=', True)])
+            [('company_id', '=', nebiz_company.id), ('user_id', '=', self._uid), ('active_signature', '=', True)])
         self.signature = rec.signature
 
     @api.onchange('company_id')

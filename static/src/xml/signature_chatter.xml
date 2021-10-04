@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="mail.Composer" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o_Composer_buttonAttachment')]" position="after">
+            <div class="o_Composer_coreHeader">
+                <form class="form">
+                    <select class="signatures_nebiz form-control" name="signature"/>
+                </form>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

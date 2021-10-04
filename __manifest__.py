@@ -2,7 +2,7 @@
 {
     'name': "Signatures",
     'summary': """
-        Module for multi-company setups which allows for all mails to be branded from the currently active company's domain.!""",
+        Module for multi-company setups which allows for all mails to be branded from the currently active company's domain.""",
     'description': """
 Signatures
 ==========
@@ -28,7 +28,12 @@ Features:
     'data': [
         'views/config.xml',
         'views/pref.xml',
-        'security/ir.model.access.csv'
+        'security/ir.model.access.csv',
+        'views/web_assets_backend.xml',
     ],
     'depends': ['base', 'mail'],
+    'qweb': [
+        'static/src/xml/signature_chatter.xml',
+        # 'static/src/xml/extend.xml',
+    ],
 }

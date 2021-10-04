@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+
+    <t t-extend="mail.Chatter.Buttons">
+        <t t-jquery="button[title='Send a message']" t-operation="after">
+            <button class="btn btn-sm btn-link o_filter_checkbox_label" title="Hide notification">Signatures
+                <input type="checkbox" class="btn btn-sm btn-link o_filter_checkbox"/>
+            </button>
+        </t>
+    </t>
+
+</template>

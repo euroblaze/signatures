@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="sign_assets_editor" inherit_id="web.assets_backend">
+            <xpath expr="script[last()]" position="after">
+                <script type="text/javascript" src="/signatures/static/src/js/web_assets_backend.js"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
