@@ -45,7 +45,6 @@ odoo.define('signatures.mail_settings_widget_extend', function (require) {
         _onClickSignature: function () {
             var signature = $('.signatures_nebiz');
             var active_sign = signature.val();
-            console.log(active_sign);
             rpc.query({
                 model: 'nebiz.signatures',
                 method: "set_active_signature",
