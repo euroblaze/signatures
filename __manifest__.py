@@ -35,7 +35,6 @@ Features:
         'web.assets_backend': [
             'signatures/static/src/js/*.js',
             'signatures/static/src/xml/*.xml',
-            'signatures/static/src/**/*.css'
         ]
     },
     'depends': ['base','mail'],
