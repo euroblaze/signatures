@@ -47,17 +47,9 @@ class ResUsers(models.Model):
     def _get_user_signature_domain(self):
         return [('x_company_id', '=', self.env.company.id), ('x_user_id', '=', self._uid)]
 
-    x_use_user_signatures = fields.Boolean(string="Use User Signatures", readonly=True,
-                                           compute='_compute_use_user_signatures', default=False, store=True)
+    x_use_user_signatures = fields.Boolean(string="Use User Signatures", default=False, store=True)
     x_user_signature_id = fields.Many2one('user.signatures', string='User Signature',
                                           domain=_get_user_signature_domain)
-
-    def _compute_use_user_signatures(self):
-        for rec in self:
-            user_signatures_permission = self.env['ir.config_parameter'].sudo().get_param(
-                'x_user_signatures.permission') or False
-            if user_signatures_permission == 'True':
-                rec.x_use_user_signatures = True
 
     @api.onchange('x_user_signature_id')
     def _onchange_signature(self):
