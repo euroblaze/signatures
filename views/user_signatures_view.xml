@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="user_signatures_view_form" model="ir.ui.view">
+            <field name="name">Add User Signatures by Company</field>
+            <field name="model">user.signatures</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="x_name"/>
+                            </h1>
+                        </div>
+                        <group name="group_top">
+                            <group name="group_left">
+                                <field name="x_user_id"/>
+                                <field name="x_company_id" widget="selection"/>
+                            </group>
+                        </group>
+                        <group name="group_down">
+                            <field name="x_signature" widget="html"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="user_signatures_view_tree" model="ir.ui.view">
+            <field name="name">User Signatures by Company List</field>
+            <field name="model">user.signatures</field>
+            <field name="arch" type="xml">
+                <tree default_order="x_company_id">
+                    <field name="x_name"/>
+                    <field name="x_user_id"/>
+                    <field name="x_company_id"/>
+                    <field name="x_signature" widget="html" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+        <record id="user_signatures_view_search" model="ir.ui.view">
+            <field name="name">User Signatures by Company Search</field>
+            <field name="model">user.signatures</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="x_name"/>
+                    <field name="x_user_id"/>
+                    <field name="x_company_id"/>
+                    <field name="x_signature" widget="html"/>
+                </search>
+            </field>
+        </record>
+        <record id="user_signatures_action" model="ir.actions.act_window">
+            <field name="name">Add User Signatures by Company</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">user.signatures</field>
+            <field name="domain">[('x_company_id','in',allowed_company_ids)]</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

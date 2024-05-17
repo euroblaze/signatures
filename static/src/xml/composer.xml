@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.Composer.actionButtons" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[@class='o_Composer_actionButtons']/t[1]/button[@t-on-click='composerView.onClickSend']" position="before">
+            <t t-if="!composerView.composer.isLog and composerView.chatter.isUserSignature">
+                <small style="display: flex; align-items: center;">
+                    <Dropdown
+                        beforeOpen="() => composerView.getUserSignatures()"
+                        togglerClass="'btn btn-light'"> <!-- Adjust margin as needed -->
+                        <t t-set-slot="toggler">
+                            <i class="fa fa-pencil" t-att-class="icon" aria-label="Select Signature" style="margin-right: 5px;"/>
+                            <span class="dropdown-toggle o_dropdown_title">Select Signature</span>
+                        </t>
+                        <t t-if="composerView.composer.selectUserSignatures">
+                            <t t-foreach="composerView.composer.selectUserSignatures" t-as="sig" t-key="sig_index">
+                                <DropdownItem
+                                    class="o_menu_item"
+                                    onSelected="() => composerView.onClickSelectSignature(sig)">
+                                    <t t-esc="sig.x_name"/>
+                                </DropdownItem>
+                            </t>
+                        </t>
+                    </Dropdown>
+                </small>
+            </t>
+        </xpath>
+    </t>
+</templates>

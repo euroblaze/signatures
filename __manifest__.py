@@ -26,12 +26,19 @@ Features:
 - Effects all Chatter communications.
     """,
     'data': [
-        'views/config.xml',
-        # 'views/pref.xml',
-        'security/ir.model.access.csv'
+        'security/ir.model.access.csv',
+        'views/user_signatures_view.xml',
+        'views/user_signatures_config_settings.xml',
+        'views/res_user_signatures.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'signatures/static/src/js/*.js',
+            'signatures/static/src/xml/*.xml',
+            'signatures/static/src/**/*.css'
+        ]
+    },
     'depends': ['base','mail'],
-    'images': 'static/description/icon.png',
     'installable': True,
     'application': False,
     'license': 'LGPL-3'

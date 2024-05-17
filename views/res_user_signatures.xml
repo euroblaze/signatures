@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="user_signature_by_company" model="ir.ui.view">
+            <field name="name">user_signature_by_company_inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='signature']" position="before">
+                    <field name="x_use_user_signatures" invisible="1"/>
+                    <field name="x_user_signature_id" attrs="{'invisible': [('x_use_user_signatures', '=', False)]}" style="width: 20%" force_save="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
