@@ -10,11 +10,6 @@ import { Chatter } from "@mail/components/chatter/chatter";
 registerPatch({
     name: 'Chatter',
     fields: {
-        xIsUserSignature: attr({
-            compute() {
-                return this.showUserSignature()
-            }
-        }),
         isUserSignature: attr({
             default: false
         }),
@@ -29,6 +24,10 @@ registerPatch({
                     return this.update({isUserSignature: false})
                 }
             })
+        },
+        showSendMessage() {
+            this._super()
+            this.showUserSignature()
         },
     }
 })
