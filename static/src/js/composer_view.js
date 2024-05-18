@@ -21,18 +21,24 @@ registerPatch({
                 'get_user_signatures',
             ).then(function(result) {
                 self.composer.update({selectUserSignatures:result})
-                console.log(result)
             })
         },
 
         _getMessageData() {
             var res = this._super();
-            res['user_signature'] = this.composer.selectedUserSignature['x_signature']
+            if (this.chatter.selectedUserSignature) {
+                res['user_signature'] = this.chatter.selectedUserSignature['x_signature']
+            }
             return res
         },
 
-        onClickSelectSignature(sig){
-            this.composer.update({selectedUserSignature: sig})
+        async onClickSelectSignature(sig){
+            if (sig['x_selected']){
+                this.chatter.update({selectedUserSignature: false})
+            }else{
+                this.chatter.update({selectedUserSignature: sig})
+            }
+            const mess = await this.messaging.rpc({ route: `/mail/message/signature/select`, params:{user_signature: sig} });
         }
     }
 })

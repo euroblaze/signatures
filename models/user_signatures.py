@@ -17,15 +17,11 @@ class UserSignatures(models.Model):
     x_signature = fields.Html(string='Signature', store=True)
     x_name = fields.Char(string='Name', required=True,
                          default=lambda self: f"Signature [{self.env.user.name}/{self.env.company.name}]")
+    x_selected = fields.Boolean(string="Selected", default=False, store=True)
 
     @api.model
     def get_user_signatures(self):
-        user_signatures = [{
-                    'x_name': '--Send without signature--',
-                    'x_signature': "",
-                    'x_user_id': self._uid,
-                    'x_company_id': self.env.company,
-                }]
+        user_signatures = []
         valid_user_signatures = self.env['user.signatures'].search(
             [('x_user_id', '=', self._uid), ('x_company_id', '=', self.env.company.id)])
 
@@ -36,9 +32,26 @@ class UserSignatures(models.Model):
                     'x_signature': sig.x_signature,
                     'x_user_id': sig.x_user_id,
                     'x_company_id': sig.x_company_id,
+                    'x_selected': sig.x_selected,
+                    'x_sig_id': sig.id
                 })
         return user_signatures
 
+    @api.model
+    def get_selected_sig(self):
+        selected_sig = self.env['user.signatures'].search(
+            [('x_user_id', '=', self._uid), ('x_company_id', '=', self.env.company.id), ('x_selected', '=', True)])
+        if selected_sig:
+            return {
+                    'x_name': selected_sig.x_name,
+                    'x_signature': selected_sig.x_signature,
+                    'x_user_id': selected_sig.x_user_id,
+                    'x_company_id': selected_sig.x_company_id,
+                    'x_selected': selected_sig.x_selected,
+                    'x_sig_id': selected_sig.id
+                }
+        else:
+            return False
 
 class ResUsers(models.Model):
     _inherit = 'res.users'

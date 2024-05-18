@@ -14,8 +14,8 @@
                         <t t-if="composerView.composer.selectUserSignatures">
                             <t t-foreach="composerView.composer.selectUserSignatures" t-as="sig" t-key="sig_index">
                                 <DropdownItem
-                                    class="o_menu_item"
-                                    onSelected="() => composerView.onClickSelectSignature(sig)">
+                                    class="{ o_menu_item: true, selected: sig.x_selected }"
+                                    onSelected="(event) => composerView.onClickSelectSignature(sig)">
                                     <t t-esc="sig.x_name"/>
                                 </DropdownItem>
                             </t>
