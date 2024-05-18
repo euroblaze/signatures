@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_user_signatures" model="ir.ui.view">
+        <field name="name">res.config.settings.view.user.signatures</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="100"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]/div[@class='app_settings_block']/div[@id='invite_users']/div" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="user_signatures_setting">
+                    <div class="o_setting_left_pane">
+                        <field name="x_user_signatures" modifiers="{}"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="x_user_signatures"/>
+                        <div class="text-muted">
+                            Configure User Signatures by Company
+                        </div>
+                        <div attrs="{'invisible': [('x_user_signatures', '=', False)]}" modifiers="{'invisible': [['x_user_signatures', '=', false]]}">
+                            <button type="action" name="signatures.user_signatures_action" string="Manage User Signatures" icon="fa-solid fa-arrow-right" class="oe_link"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
