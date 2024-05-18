@@ -14,9 +14,6 @@ registerPatch({
     name:'Composer',
     fields: {
         selectUserSignatures: attr(),
-        selectedUserSignature: attr({
-            default: false
-        })
     },
 })
 

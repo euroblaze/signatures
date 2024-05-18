@@ -13,16 +13,22 @@ registerPatch({
         isUserSignature: attr({
             default: false
         }),
+        selectedUserSignature: attr({
+            default: false
+        })
     },
     recordMethods: {
         async showUserSignature() {
             var orm = this.env.services.orm;
             const flag = await orm.call("ir.config_parameter","get_param",['x_user_signatures.permission']).then(result =>{
                 if (result == 'True') {
-                    return this.update({isUserSignature: true})
+                    this.update({isUserSignature: true})
                 } else {
-                    return this.update({isUserSignature: false})
+                    this.update({isUserSignature: false})
                 }
+            })
+            const setDefaultSig = await orm.call("user.signatures","get_selected_sig").then(result =>{
+                this.update({selectedUserSignature: result})
             })
         },
         showSendMessage() {
