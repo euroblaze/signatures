@@ -25,8 +25,9 @@ class UserSignatureController(DiscussController):
             thread = channel_member_sudo.channel_id
         else:
             thread = request.env[thread_model].browse(int(thread_id)).exists()
-        if 'user_signature' in post_data.keys() and post_data['user_signature']:
-            message_body = post_data['body'] + f"<div>{post_data['user_signature']}</div>"
-            post_data['body'] = message_body
-            post_data.pop('user_signature')
+        if 'user_signature' in post_data.keys():
+            if post_data['user_signature'] != "":
+                message_body = post_data['body'] + f"<div>{post_data['user_signature']}</div>"
+                post_data['body'] = message_body
+                post_data.pop('user_signature')
         return thread.message_post(**{key: value for key, value in post_data.items() if key in self._get_allowed_message_post_params()}).message_format()[0]
