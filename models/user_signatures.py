@@ -16,14 +16,14 @@ class UserSignatures(models.Model):
     x_company_id = fields.Many2one('res.company', 'Company', store=True, default=lambda self: self.env.company)
     x_signature = fields.Html(string='Signature', store=True)
     x_name = fields.Char(string='Name', required=True,
-                         default=lambda self: f"Signature [{self.env.user.name}/{self.env.company.name}]")
+                         default=lambda self: f"Signature [{self.env.company.name}]")
     x_selected = fields.Boolean(string="Selected", default=False, store=True)
 
     @api.model
     def get_user_signatures(self):
         user_signatures = []
         valid_user_signatures = self.env['user.signatures'].search(
-            [('x_user_id', '=', self._uid), ('x_company_id', '=', self.env.company.id)])
+            [('x_user_id', '=', self._uid), ('x_company_id', 'in', self.env.context.get('allowed_company_ids'))])
 
         if valid_user_signatures:
             for sig in valid_user_signatures:
@@ -40,7 +40,7 @@ class UserSignatures(models.Model):
     @api.model
     def get_selected_sig(self):
         selected_sig = self.env['user.signatures'].search(
-            [('x_user_id', '=', self._uid), ('x_company_id', '=', self.env.company.id), ('x_selected', '=', True)])
+            [('x_user_id', '=', self._uid), ('x_company_id', 'in', self.env.context.get('allowed_company_ids')), ('x_selected', '=', True)])
         if selected_sig:
             return {
                     'x_name': selected_sig.x_name,
@@ -58,7 +58,7 @@ class ResUsers(models.Model):
 
     @api.model
     def _get_user_signature_domain(self):
-        return [('x_company_id', '=', self.env.company.id), ('x_user_id', '=', self._uid)]
+        return [('x_company_id', 'in', self.env.context.get('allowed_company_ids')), ('x_user_id', '=', self._uid)]
 
     x_use_user_signatures = fields.Boolean(string="Use User Signatures", default=False, store=True)
     x_user_signature_id = fields.Many2one('user.signatures', string='User Signature',
