@@ -35,7 +35,7 @@ class UserSignatureController(DiscussController):
     def mail_signature_select(self, user_signature, **kwargs):
         sig_id = user_signature['x_sig_id']
         reset_user_signatures = request.env['user.signatures'].search(
-            [('x_user_id', '=', request.env.user.id), ('x_company_id', '=', request.env.company.id), ('id', '!=', int(sig_id))])
+            [('x_user_id', '=', request.env.context.get('uid')), ('x_company_id', 'in', request.env.context.get('allowed_company_ids')), ('id', '!=', int(sig_id))])
         selected_user_signature = request.env['user.signatures'].browse(int(sig_id))
         if selected_user_signature.x_selected:
             selected_user_signature.x_selected = False
