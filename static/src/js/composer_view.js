@@ -29,16 +29,27 @@ registerPatch({
             if (this.chatter.selectedUserSignature) {
                 res['user_signature'] = this.chatter.selectedUserSignature['x_signature']
             }
+            if (!this.chatter.selectedUserSignature){
+                if (this.composer.selectUserSignatures){
+                    this.chatter.update({selectedUserSignature: this.composer.selectUserSignatures.find(item => item.x_selected === true)})
+                }
+                res['user_signature'] = this.chatter.selectedUserSignature['x_signature']
+            }
             return res
         },
 
         async onClickSelectSignature(sig){
+            const orm = this.env.services.orm;
             if (sig['x_selected']){
                 this.chatter.update({selectedUserSignature: false})
             }else{
                 this.chatter.update({selectedUserSignature: sig})
             }
-            const mess = await this.messaging.rpc({ route: `/mail/message/signature/select`, params:{user_signature: sig} });
+            return await orm.call(
+                'user.signatures',
+                'mail_signature_select',
+                ['',sig]
+            )
         }
     }
 })

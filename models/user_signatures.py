@@ -41,6 +41,10 @@ class UserSignatures(models.Model):
     def get_selected_sig(self):
         selected_sig = self.env['user.signatures'].search(
             [('x_user_id', '=', self._uid), ('x_company_id', 'in', self.env.context.get('allowed_company_ids')), ('x_selected', '=', True)])
+        if len(selected_sig) > 1:
+            selected_sig = self.env['user.signatures'].search(
+                [('x_user_id', '=', self._uid), ('x_company_id', '=', self.env.user.company_id.id),
+                 ('x_selected', '=', True)], limit=1)
         if selected_sig:
             return {
                     'x_name': selected_sig.x_name,
@@ -52,6 +56,20 @@ class UserSignatures(models.Model):
                 }
         else:
             return False
+
+    def mail_signature_select(self, user_signature):
+        sig_id = user_signature['x_sig_id']
+        reset_user_signatures = self.env['user.signatures'].search(
+            [('x_user_id', '=', self.env.context.get('uid')), ('x_company_id', 'in', self.env.context.get('allowed_company_ids')), ('id', '!=', int(sig_id))])
+        selected_user_signature = self.env['user.signatures'].browse(int(sig_id))
+        if selected_user_signature.x_selected:
+            selected_user_signature.x_selected = False
+            return selected_user_signature
+        selected_user_signature.x_selected = True
+        for sig in reset_user_signatures:
+            sig.x_selected = False
+
+        return selected_user_signature
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
