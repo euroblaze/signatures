@@ -31,6 +31,7 @@ registerPatch({
             }
             if (!this.chatter.selectedUserSignature){
                 if (this.composer.selectUserSignatures){
+                    console.log(this.composer.selectUserSignatures.find(item => item.x_selected === true))
                     this.chatter.update({selectedUserSignature: this.composer.selectUserSignatures.find(item => item.x_selected === true)})
                 }
                 res['user_signature'] = this.chatter.selectedUserSignature['x_signature']
@@ -40,16 +41,19 @@ registerPatch({
 
         async onClickSelectSignature(sig){
             const orm = this.env.services.orm;
+            const self = this
             if (sig['x_selected']){
                 this.chatter.update({selectedUserSignature: false})
             }else{
                 this.chatter.update({selectedUserSignature: sig})
             }
-            return await orm.call(
+            await orm.call(
                 'user.signatures',
                 'mail_signature_select',
                 ['',sig]
-            )
+            ).then(async function(result) {
+                await self.getUserSignatures()
+            })
         }
     }
 })
