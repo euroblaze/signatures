@@ -30,18 +30,3 @@ class UserSignatureController(DiscussController):
                 post_data.pop('user_signature')
         return thread.message_post(**{key: value for key, value in post_data.items() if
                                       key in self._get_allowed_message_post_params()}).message_format()[0]
-
-    @http.route('/mail/message/signature/select', methods=['POST'], type='json', auth='public')
-    def mail_signature_select(self, user_signature, **kwargs):
-        sig_id = user_signature['x_sig_id']
-        reset_user_signatures = request.env['user.signatures'].search(
-            [('x_user_id', '=', request.env.context.get('uid')), ('x_company_id', 'in', request.env.context.get('allowed_company_ids')), ('id', '!=', int(sig_id))])
-        selected_user_signature = request.env['user.signatures'].browse(int(sig_id))
-        if selected_user_signature.x_selected:
-            selected_user_signature.x_selected = False
-            return selected_user_signature
-        selected_user_signature.x_selected = True
-        for sig in reset_user_signatures:
-            sig.x_selected = False
-
-        return selected_user_signature
