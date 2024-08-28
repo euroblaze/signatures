@@ -1,4 +1,4 @@
-# job_board__models.py
+# job_board.py
 
 This file contains the core models for the job board application.
 
@@ -35,7 +35,7 @@ This class manages payouts for affiliates.
 Business Logic:
 This file supports the core functionality of job posting, management, and affiliate payouts. It handles the lifecycle of job offers from creation to expiration, including integration with social media platforms.
 
-# applicants__models.py
+# applicants.py
 
 This file manages applicant-related models.
 
@@ -53,7 +53,7 @@ This class manages search profiles for job seekers.
 Business Logic:
 This file supports the applicant side of the job board, allowing job seekers to create profiles and save search criteria for job matching.
 
-# clipping_service_csv_files__models.py
+# clipping_service_csv_files.py
 
 This file handles CSV file imports for partner data.
 
@@ -89,7 +89,7 @@ This class represents company profiles on the platform.
 Business Logic:
 This file supports the management of company profiles, including creation of user accounts for company representatives.
 
-# german_cities__models.py
+# german_cities.py
 
 This file manages data related to German cities and locations.
 
@@ -104,7 +104,7 @@ This class represents German federal states.
 Business Logic:
 This file supports location-based functionality, particularly for job listings and searches within Germany.
 
-# ir_http__models.py
+# ir_http.py
 
 This file extends the core HTTP handling for the application.
 
@@ -118,7 +118,7 @@ This class extends the HTTP request handling.
 Business Logic:
 This file supports custom HTTP request handling, particularly for affiliate-related functionality.
 
-# ir_mail_server__models.py
+# ir_mail_server.py
 
 This file extends the mail server functionality.
 
@@ -129,7 +129,7 @@ This class extends the mail server model.
 Business Logic:
 This file supports customization of email sending, particularly increasing the size limit for SMTP passwords.
 
-# job_applications__models.py
+# job_applications.py
 
 This file manages job applications.
 
@@ -140,7 +140,7 @@ This class represents job applications submitted by users.
 Business Logic:
 This file supports the process of job seekers applying for positions listed on the platform.
 
-# job_offers__models.py
+# job_offers.py
 
 This file manages job offers in detail.
 
@@ -155,7 +155,7 @@ This class represents detailed job offers.
 Business Logic:
 This file supports advanced job offer management, including AI-powered classification and description generation.
 
-# link_tracker__models.py
+# link_tracker.py
 
 This file manages link tracking functionality.
 
@@ -169,7 +169,7 @@ This class handles link tracking for the platform.
 Business Logic:
 This file supports link tracking functionality, particularly for email campaigns and analytics.
 
-# newsletter__models.py
+# newsletter.py
 
 This file manages newsletter functionality.
 
