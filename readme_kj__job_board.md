@@ -1,4 +1,4 @@
-# job_board.py
+# job_board Module
 
 This file contains the core models for the job board application.
 
