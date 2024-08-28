@@ -2,6 +2,7 @@
 
 This file contains the core models for the job board application.
 
+```
 > Prompt:
 > There are many python classes and functions in this concatenated code-file.
 > Each python code file is separated by the string "!# © 2019 Websoftix (http://www.websoftix.com)!".
@@ -9,6 +10,7 @@ This file contains the core models for the job board application.
 > Use h2 to describe classes.
 > Use h3 to describe the methods.
 > For each code-file, explain the business logic it supports.
+```
 
 ## JobOffers
 
