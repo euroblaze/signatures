@@ -8,8 +8,12 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='signature']" position="replace">
                     <field name="x_use_user_signatures"/>
-                    <field name="x_user_signature_id" attrs="{'invisible': [('x_use_user_signatures', '=', False)]}" style="width: 20%"/>
-                    <field name="signature" readonly="0" options="{'style-inline': true, 'codeview': true}"/>
+                    <field name="x_user_signature_id"
+                           invisible="not x_use_user_signatures"
+                           style="width: 20%"/>
+                    <field name="signature"
+                           readonly="False"
+                           options="{'style-inline': true, 'codeview': true}"/>
                 </xpath>
             </field>
         </record>

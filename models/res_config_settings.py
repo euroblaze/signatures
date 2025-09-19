@@ -7,4 +7,5 @@ class ResConfigSettings(models.TransientModel):
     x_user_signatures = fields.Boolean(
         config_parameter='x_user_signatures.permission',
         string='User Signatures',
+        help="Enable user signature management functionality"
     )

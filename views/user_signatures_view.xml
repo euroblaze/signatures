@@ -29,12 +29,12 @@
             <field name="name">User Signatures by Company List</field>
             <field name="model">user.signatures</field>
             <field name="arch" type="xml">
-                <tree default_order="x_company_id">
+                <list default_order="x_company_id">
                     <field name="x_name"/>
                     <field name="x_user_id"/>
                     <field name="x_company_id"/>
                     <field name="x_signature" widget="html" optional="hide"/>
-                </tree>
+                </list>
             </field>
         </record>
         <record id="user_signatures_view_search" model="ir.ui.view">
@@ -50,11 +50,36 @@
             </field>
         </record>
         <record id="user_signatures_action" model="ir.actions.act_window">
-            <field name="name">Add User Signatures by Company</field>
+            <field name="name">User Signatures</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">user.signatures</field>
             <field name="domain">[('x_company_id','in',allowed_company_ids)]</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first signature!
+                </p>
+                <p>
+                    Set up specific signatures per company to brand your email communications.
+                    Each user can create signatures for themselves for each available company.
+                </p>
+            </field>
         </record>
+
+        <!-- Menu Structure -->
+        <menuitem id="signatures_main_menu"
+                  name="Signatures"
+                  sequence="50"/>
+
+        <menuitem id="signatures_config_menu"
+                  name="Configuration"
+                  parent="signatures_main_menu"
+                  sequence="10"/>
+
+        <menuitem id="user_signatures_menu"
+                  name="User Signatures"
+                  parent="signatures_config_menu"
+                  action="user_signatures_action"
+                  sequence="10"/>
     </data>
 </odoo>

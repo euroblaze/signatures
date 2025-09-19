@@ -1,23 +1,48 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, tools, _
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-from email.utils import formataddr
-import base64
-from odoo.tools import is_html_empty, partition, collections, frozendict, lazy_property
-from markupsafe import Markup
 
 
 class UserSignatures(models.Model):
     _name = 'user.signatures'
+    _description = 'User Signatures'
     _rec_name = 'x_name'
+    _sql_constraints = [
+        ('unique_user_company_signature',
+         'UNIQUE (x_user_id, x_company_id)',
+         'A user can only have one signature per company!')
+    ]
 
-    x_user_id = fields.Many2one('res.users', 'User', store=True, required=True, default=lambda self: self.env.user)
-    x_company_id = fields.Many2one('res.company', 'Company', store=True, default=lambda self: self.env.company)
-    x_signature = fields.Html(string='Signature', store=True)
-    x_name = fields.Char(string='Name', required=True,
-                         default=lambda self: f"Signature [{self.env.company.name}]")
-    x_selected = fields.Boolean(string="Selected", default=False, store=True)
+    x_user_id = fields.Many2one(
+        'res.users',
+        string='User',
+        required=True,
+        default=lambda self: self.env.user,
+        help="User who owns this signature"
+    )
+    x_company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        required=True,
+        default=lambda self: self.env.company,
+        help="Company for which this signature is used"
+    )
+    x_signature = fields.Html(
+        string='Signature',
+        help="HTML signature content"
+    )
+    x_name = fields.Char(
+        string='Name',
+        required=True,
+        default=lambda self: f"Signature [{self.env.company.name}]",
+        help="Display name for this signature"
+    )
+    x_selected = fields.Boolean(
+        string="Selected",
+        default=False,
+        help="Whether this signature is currently selected for use"
+    )
 
     @api.model
     def get_user_signatures(self):
@@ -76,14 +101,26 @@ class ResUsers(models.Model):
 
     @api.model
     def _get_user_signature_domain(self):
-        return [('x_company_id', 'in', self.env.context.get('allowed_company_ids')), ('x_user_id', '=', self._uid)]
+        return [
+            ('x_company_id', 'in', self.env.context.get('allowed_company_ids', [])),
+            ('x_user_id', '=', self._uid)
+        ]
 
-    x_use_user_signatures = fields.Boolean(string="Use User Signatures", default=False, store=True)
-    x_user_signature_id = fields.Many2one('user.signatures', string='User Signature',
-                                          domain=_get_user_signature_domain)
+    x_use_user_signatures = fields.Boolean(
+        string="Use User Signatures",
+        default=False,
+        help="Enable custom signature management per company"
+    )
+    x_user_signature_id = fields.Many2one(
+        'user.signatures',
+        string='User Signature',
+        domain=_get_user_signature_domain,
+        help="Select signature for current company"
+    )
 
     @api.onchange('x_user_signature_id')
     def _onchange_signature(self):
+        """Update user signature when signature is selected"""
         for user in self:
             if user.x_user_signature_id:
                 user.signature = user.x_user_signature_id.x_signature

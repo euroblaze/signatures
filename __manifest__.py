@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Signatures",
-    'author': '(initially) Ashant Chalasani, Alieh Vo',
-    'company': 'PowerOn | Wapsol GmbH',
-    'application': True,
-    'category': 'Signatures',
-    'version': '16.0.0.1',
+    'author': 'PowerOn',
+    'company': 'PowerOn',
+    'application': False,
+    'category': 'Productivity/Other',
+    'version': '18.0.1.0.0',
     'summary': """
-        Module for multi-company setups which allows for all mails to be branded from the currently active company's domain.!""",
+        Multi-company signature management for branded email communications""",
     'description': """
 Signatures
 ==========
-Develop an enterprise 16 compatible module for multi-company setups which allows for all mails to be branded from the currently active company's domain.
+Enterprise compatible module for multi-company setups which allows for all mails to be branded from the currently active company's domain.
 
 Features:
 
@@ -31,14 +31,9 @@ Features:
         'views/user_signatures_config_settings.xml',
         'views/res_user_signatures.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'signatures/static/src/js/*.js',
-            'signatures/static/src/xml/*.xml',
-        ]
-    },
-    'depends': ['base','mail'],
+    'depends': ['base', 'mail'],
     'installable': True,
     'application': False,
+    'auto_install': False,
     'license': 'LGPL-3'
 }
