@@ -1,0 +1,176 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* signatures
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20251021\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-05 04:46+0000\n"
+"PO-Revision-Date: 2025-11-05 04:46+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
+
+#. module: signatures
+#: model:ir.model.constraint,message:signatures.constraint_user_signatures_unique_user_company_signature
+msgid "A user can only have one signature per company!"
+msgstr "Ein Benutzer kann nur eine Signatur pro Unternehmen haben!"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__x_company_id
+msgid "Company"
+msgstr "Unternehmen"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_user_signatures__x_company_id
+msgid "Company for which this signature is used"
+msgstr "Unternehmen, für das diese Signatur verwendet wird"
+
+#. module: signatures
+#: model:ir.model,name:signatures.model_res_config_settings
+msgid "Config Settings"
+msgstr "Konfigurationseinstellungen"
+
+#. module: signatures
+#: model:ir.ui.menu,name:signatures.signatures_config_menu
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#. module: signatures
+#: model_terms:ir.ui.view,arch_db:signatures.res_config_settings_view_user_signatures
+msgid "Configure User Signatures by Company"
+msgstr "Benutzersignaturen pro Unternehmen konfigurieren"
+
+#. module: signatures
+#: model_terms:ir.actions.act_window,help:signatures.user_signatures_action
+msgid "Create your first signature!"
+msgstr "Erstellen Sie Ihre erste Signatur!"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__create_date
+msgid "Created on"
+msgstr "Erstellt am"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_user_signatures__x_name
+msgid "Display name for this signature"
+msgstr "Anzeigename für diese Signatur"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_res_users__x_use_user_signatures
+msgid "Enable custom signature management per company"
+msgstr "Benutzerdefinierte Signaturverwaltung pro Unternehmen aktivieren"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_res_config_settings__x_user_signatures
+msgid "Enable user signature management functionality"
+msgstr "Funktion zur Verwaltung von Benutzersignaturen aktivieren"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_user_signatures__x_signature
+msgid "HTML signature content"
+msgstr "HTML-Inhalt der Signatur"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__id
+msgid "ID"
+msgstr "ID"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: signatures
+#: model_terms:ir.ui.view,arch_db:signatures.res_config_settings_view_user_signatures
+msgid "Manage User Signatures"
+msgstr "Benutzersignaturen verwalten"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__x_name
+msgid "Name"
+msgstr "Name"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_res_users__x_user_signature_id
+msgid "Select signature for current company"
+msgstr "Signatur für das aktuelle Unternehmen auswählen"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__x_selected
+msgid "Selected"
+msgstr "Ausgewählt"
+
+#. module: signatures
+#: model_terms:ir.actions.act_window,help:signatures.user_signatures_action
+msgid ""
+"Set up specific signatures per company to brand your email communications.\n"
+"                    Each user can create signatures for themselves for each available company."
+msgstr ""
+"Richten Sie für jedes Unternehmen eigene Signaturen ein, um Ihre E-Mail-Kommunikation zu gestalten.\n"
+"                    Jeder Benutzer kann für jedes verfügbare Unternehmen eigene Signaturen erstellen."
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__x_signature
+msgid "Signature"
+msgstr "Signatur"
+
+#. module: signatures
+#: model:ir.ui.menu,name:signatures.signatures_main_menu
+msgid "Signatures"
+msgstr "Signaturen"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_res_users__x_use_user_signatures
+msgid "Use User Signatures"
+msgstr "Benutzersignaturen verwenden"
+
+#. module: signatures
+#: model:ir.model,name:signatures.model_res_users
+#: model:ir.model.fields,field_description:signatures.field_user_signatures__x_user_id
+msgid "User"
+msgstr "Benutzer"
+
+#. module: signatures
+#: model:ir.model.fields,field_description:signatures.field_res_users__x_user_signature_id
+msgid "User Signature"
+msgstr "Benutzersignatur"
+
+#. module: signatures
+#: model:ir.actions.act_window,name:signatures.user_signatures_action
+#: model:ir.model,name:signatures.model_user_signatures
+#: model:ir.model.fields,field_description:signatures.field_res_config_settings__x_user_signatures
+#: model:ir.ui.menu,name:signatures.user_signatures_menu
+#: model_terms:ir.ui.view,arch_db:signatures.res_config_settings_view_user_signatures
+msgid "User Signatures"
+msgstr "Benutzersignaturen"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_user_signatures__x_user_id
+msgid "User who owns this signature"
+msgstr "Benutzer, dem diese Signatur gehört"
+
+#. module: signatures
+#: model:ir.model.fields,help:signatures.field_user_signatures__x_selected
+msgid "Whether this signature is currently selected for use"
+msgstr "Gibt an, ob diese Signatur derzeit verwendet wird"

@@ -108,7 +108,7 @@ class ResUsers(models.Model):
 
     x_use_user_signatures = fields.Boolean(
         string="Use User Signatures",
-        default=False,
+        compute="_compute_use_user_signture",
         help="Enable custom signature management per company"
     )
     x_user_signature_id = fields.Many2one(
@@ -124,3 +124,7 @@ class ResUsers(models.Model):
         for user in self:
             if user.x_user_signature_id:
                 user.signature = user.x_user_signature_id.x_signature
+
+    def _compute_use_user_signture(self):
+        for user in self:
+            user['x_use_user_signatures'] = self.env['ir.config_parameter'].sudo().get_param('x_user_signatures.permission', False)

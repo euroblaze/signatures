@@ -49,9 +49,12 @@ class UserSignatureController(ThreadController):
             thread.env.context = frozendict(
                 thread.env.context, mail_create_nosubscribe=True, mail_post_autofollow=False
             )
-        
+
+        allow_add_signature = request.env["ir.config_parameter"].sudo().get_param('x_user_signatures.permission', False)
+        post_data['email_add_signature'] = allow_add_signature        
         # Handle user signature if present
-        if 'user_signature' in post_data and post_data['user_signature']:
+        if 'user_signature' in post_data and post_data['user_signature'] and allow_add_signature:
+            post_data['signature'] = ''
             message_body = post_data.get('body', '') + f"<div>{post_data['user_signature']}</div>"
             post_data['body'] = message_body
             post_data.pop('user_signature')

@@ -7,24 +7,17 @@
         <field name="priority" eval="100"/>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
-                <block title="Signatures">
-                    <setting help="Configure User Signatures by Company">
-                        <div class="content-group">
-                            <div class="row mt16">
-                                <label class="col-3 o_light_label" for="x_user_signatures" string="User Signatures"/>
-                                <field name="x_user_signatures"/>
-                            </div>
-                            <div class="row mt16" invisible="not x_user_signatures">
-                                <button type="action"
-                                        name="signatures.user_signatures_action"
-                                        string="Manage User Signatures"
-                                        icon="fa-arrow-right"
-                                        class="btn-link"/>
-                            </div>
-                        </div>
-                    </setting>
-                </block>
+            <xpath expr="//block[@name='users_setting_container']" position="inside">
+                <setting string="User Signatures" help="Configure User Signatures by Company">
+                    <field name="x_user_signatures"/>
+                    <div class="mt8" invisible="not x_user_signatures">
+                        <button type="action"
+                                name="signatures.user_signatures_action"
+                                string="Manage User Signatures"
+                                icon="fa-arrow-right"
+                                class="btn-link"/>
+                    </div>
+                </setting>
             </xpath>
         </field>
     </record>
