@@ -5,7 +5,7 @@
     'company': 'PowerOn',
     'application': False,
     'category': 'Productivity/Other',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.1.0',
     'summary': """
         Multi-company signature management for branded email communications""",
     'description': """
@@ -31,7 +31,7 @@ Features:
         'views/user_signatures_config_settings.xml',
         'views/res_user_signatures.xml',
     ],
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail', 'hr'],
     'installable': True,
     'application': False,
     'auto_install': False,
